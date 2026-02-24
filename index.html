@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bin Night Guernsey</title>
+  <meta name="description" content="Know exactly what to put out tonight. Bin collection nights for every address in Guernsey.">
+  <meta name="theme-color" content="#060f1c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bin Night">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:       #060f1c;
+      --bg2:      #091625;
+      --surface:  #0c1e35;
+      --surface2: #102540;
+      --glass:    rgba(255,255,255,0.045);
+      --border:   rgba(255,255,255,0.08);
+      --border2:  rgba(255,255,255,0.13);
+      --text:     #ddeeff;
+      --muted:    rgba(221,238,255,0.5);
+      --dim:      rgba(221,238,255,0.28);
+      --accent:   #3db8f5;
+      --accent2:  #ffbe5c;
+      --green:    #5ecb74;
+      --red:      #f07070;
+      --clear-c: #9fd49f; --clear-bg: rgba(159,212,159,.12); --clear-b: rgba(159,212,159,.2);
+      --blue-c:  #6eb8f7; --blue-bg:  rgba(110,184,247,.12); --blue-b:  rgba(110,184,247,.2);
+      --glass-c: #72d4cc; --glass-bg: rgba(114,212,204,.12); --glass-b: rgba(114,212,204,.2);
+      --black-c: #99b0c2; --black-bg: rgba(153,176,194,.1);  --black-b: rgba(153,176,194,.18);
+      --food-c:  #ffbe5c; --food-bg:  rgba(255,190,92,.12);  --food-b:  rgba(255,190,92,.2);
+      --r: 16px; --rsm: 10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100%;
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior: none;
+    }
+
+    /* Background */
+    #bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.55; }
+    .blob-1 { width:500px;height:500px;background:radial-gradient(circle,rgba(15,60,140,.5) 0%,transparent 70%);bottom:-150px;left:-100px; }
+    .blob-2 { width:350px;height:350px;background:radial-gradient(circle,rgba(5,100,80,.3) 0%,transparent 70%);top:80px;right:-80px; }
+    .blob-3 { width:280px;height:280px;background:radial-gradient(circle,rgba(61,184,245,.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%); }
+
+    /* Layout */
+    #app { position:relative;z-index:1;max-width:480px;margin:0 auto;min-height:100vh;padding-bottom:80px;display:flex;flex-direction:column; }
+
+    /* Header */
+    .header { padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between; }
+    .brand { display:flex;align-items:center;gap:9px; }
+    .brand-mark { width:36px;height:36px;background:linear-gradient(135deg,#0e2a52 0%,#071830 100%);border:1px solid rgba(61,184,245,.25);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0; }
+    .brand-name { font-family:'Fraunces',serif;font-size:16.5px;font-weight:500;line-height:1.1;letter-spacing:-0.01em; }
+    .brand-name em { color:var(--accent);font-style:italic; }
+    .brand-sub { font-size:10px;color:var(--dim);font-weight:400;letter-spacing:.02em; }
+    .icon-btn { width:34px;height:34px;border-radius:50%;background:var(--glass);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s; }
+    .icon-btn:hover { background:rgba(255,255,255,.08);color:var(--text); }
+    .icon-btn svg { width:15px;height:15px; }
+
+    /* Pages */
+    .page { display:none; }
+    .page.active { display:block; }
+
+    /* ── SEARCH PAGE ── */
+    #page-search { padding:0 20px; }
+    .search-hero { padding:28px 0 22px;animation:fadeUp .4s .05s both; }
+    .search-hero-title { font-family:'Fraunces',serif;font-size:28px;font-weight:500;line-height:1.15;margin-bottom:8px;letter-spacing:-.02em; }
+    .search-hero-title em { color:var(--accent);font-style:italic; }
+    .search-hero-sub { font-size:13.5px;color:var(--muted);line-height:1.6; }
+
+    .search-row { display:flex;gap:8px;margin-bottom:10px;animation:fadeUp .4s .12s both; }
+    .search-wrap { position:relative;flex:1; }
+    .search-icon { position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--dim);pointer-events:none; }
+    .search-icon svg { width:15px;height:15px;display:block; }
+    .search-input { width:100%;padding:13px 13px 13px 38px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rsm);color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none; }
+    .search-input:focus { outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(61,184,245,.12); }
+    .search-input::placeholder { color:var(--dim); }
+
+    .btn-search { padding:13px 18px;background:var(--accent);color:#060f1c;border:none;border-radius:var(--rsm);font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:opacity .15s,transform .1s;display:flex;align-items:center;gap:6px; }
+    .btn-search:hover { opacity:.88; }
+    .btn-search:active { transform:scale(.97); }
+    .btn-search:disabled { opacity:.5;cursor:default;transform:none; }
+    .btn-search svg { width:15px;height:15px; }
+
+    .gps-row { display:flex;align-items:center;gap:8px;margin-bottom:16px;animation:fadeUp .4s .18s both; }
+    .gps-divider { flex:1;height:1px;background:var(--border); }
+    .btn-gps { display:flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(61,184,245,.08);border:1px solid rgba(61,184,245,.22);border-radius:100px;color:var(--accent);font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s; }
+    .btn-gps:hover { background:rgba(61,184,245,.14); }
+    .btn-gps:disabled { opacity:.5;cursor:default; }
+    .btn-gps svg { width:12px;height:12px; }
+
+    /* Results */
+    .results-box { background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;margin-bottom:12px;animation:fadeUp .25s both; }
+    .results-header { padding:10px 14px;font-size:10.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--border); }
+    .results-refine { padding:9px 14px 7px;font-size:11.5px;color:var(--muted);border-bottom:1px solid var(--border);font-style:italic; }
+    .result-item { display:flex;align-items:center;padding:12px 14px;gap:10px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s; }
+    .result-item:last-child { border-bottom:none; }
+    .result-item:hover { background:rgba(61,184,245,.06); }
+    .result-item:active { background:rgba(61,184,245,.1); }
+    .result-icon { width:28px;height:28px;flex-shrink:0;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px; }
+    .result-text { flex:1;min-width:0; }
+    .result-addr { font-size:13px;font-weight:500;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .result-pc { font-size:11px;color:var(--muted);margin-top:1px;display:block; }
+    .result-chevron { color:var(--dim);flex-shrink:0; }
+    .result-chevron svg { width:14px;height:14px;display:block; }
+
+    /* Messages */
+    .msg { display:flex;align-items:flex-start;gap:9px;padding:12px 14px;border-radius:var(--rsm);font-size:12.5px;line-height:1.55;margin-bottom:10px;animation:fadeUp .2s both; }
+    .msg-icon { font-size:15px;flex-shrink:0;margin-top:1px; }
+    .msg.error { background:rgba(240,112,112,.1);border:1px solid rgba(240,112,112,.2);color:#f4a0a0; }
+    .msg.info  { background:rgba(61,184,245,.08);border:1px solid rgba(61,184,245,.2);color:var(--accent); }
+    .msg.warn  { background:rgba(255,190,92,.08);border:1px solid rgba(255,190,92,.2);color:var(--accent2); }
+
+    .spinner { display:inline-block;width:14px;height:14px;border:2px solid rgba(6,15,28,.25);border-top-color:#060f1c;border-radius:50%;animation:spin .7s linear infinite; }
+    .spinner-blue { border-color:rgba(61,184,245,.25);border-top-color:var(--accent); }
+
+    /* ── HOME PAGE ── */
+    #page-home { padding:0; }
+    .addr-strip { display:flex;align-items:center;gap:8px;padding:14px 20px 0;animation:fadeUp .3s both; }
+    .addr-strip svg { width:13px;height:13px;color:var(--accent);flex-shrink:0; }
+    .addr-strip-text { flex:1;font-size:12.5px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .addr-change { font-size:11.5px;color:var(--accent);cursor:pointer;white-space:nowrap;text-decoration:underline;opacity:.8; }
+
+    .hero { padding:12px 20px 0; }
+    .hero-card { background:linear-gradient(145deg,var(--surface) 0%,var(--surface2) 100%);border:1px solid var(--border2);border-radius:var(--r);padding:22px 20px 20px;position:relative;overflow:hidden;animation:fadeUp .4s .08s both; }
+    .hero-card::before { content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 90% 10%,rgba(61,184,245,.07) 0%,transparent 60%); }
+    .hero-eyebrow { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:7px; }
+    .hero-night { font-family:'Fraunces',serif;font-size:34px;line-height:1.05;font-weight:500;letter-spacing:-.02em;margin-bottom:5px; }
+    .hero-meta { font-size:12.5px;color:var(--muted);margin-bottom:14px;line-height:1.5; }
+    .countdown { display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:100px;font-size:12.5px;font-weight:600;margin-bottom:16px;background:rgba(61,184,245,.1);border:1px solid rgba(61,184,245,.25);color:var(--accent); }
+    .countdown.tonight { background:rgba(94,203,116,.12);border-color:rgba(94,203,116,.3);color:var(--green); }
+    .countdown svg { width:13px;height:13px; }
+
+    .bags { display:grid;grid-template-columns:1fr 1fr;gap:7px; }
+    .bag-chip { display:flex;align-items:center;gap:8px;padding:10px 11px;border-radius:var(--rsm);border:1px solid transparent;font-size:12px;font-weight:500; }
+    .bag-chip.full { grid-column:span 2; }
+    .bag-chip.clear { background:var(--clear-bg);border-color:var(--clear-b);color:var(--clear-c); }
+    .bag-chip.blue  { background:var(--blue-bg); border-color:var(--blue-b); color:var(--blue-c); }
+    .bag-chip.glass { background:var(--glass-bg);border-color:var(--glass-b);color:var(--glass-c); }
+    .bag-chip.black { background:var(--black-bg);border-color:var(--black-b);color:var(--black-c); }
+    .bag-chip.food  { background:var(--food-bg); border-color:var(--food-b); color:var(--food-c); }
+    .chip-emo { font-size:18px;flex-shrink:0; }
+    .chip-info { min-width:0; }
+    .chip-name { display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .chip-sub  { display:block;font-size:10.5px;opacity:.6;font-weight:400;margin-top:1px; }
+
+    .install-banner { margin:10px 20px 0;display:flex;align-items:center;gap:10px;padding:11px 14px;background:rgba(61,184,245,.07);border:1px solid rgba(61,184,245,.18);border-radius:var(--rsm);cursor:pointer;transition:background .15s;animation:fadeUp .4s .25s both; }
+    .install-banner:hover { background:rgba(61,184,245,.12); }
+    .install-banner-icon { font-size:18px;flex-shrink:0; }
+    .install-banner-body { flex:1; }
+    .install-banner-body strong { display:block;font-size:12.5px;color:var(--accent); }
+    .install-banner-body span { font-size:11px;color:var(--muted); }
+    .install-banner-arrow { color:var(--dim);font-size:18px; }
+
+    .section { padding:0 20px;margin-top:18px; }
+    .section-label { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:10px; }
+    .cal-list { display:flex;flex-direction:column;gap:6px; }
+    .cal-row { display:flex;align-items:center;background:var(--glass);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 13px;gap:11px; }
+    .cal-row.next { background:rgba(61,184,245,.06);border-color:rgba(61,184,245,.18); }
+    .cal-date { min-width:48px; }
+    .cal-dow  { font-size:12.5px;font-weight:600; }
+    .cal-dstr { font-size:10.5px;color:var(--muted);margin-top:1px; }
+    .cal-pills { display:flex;flex-wrap:wrap;gap:4px;flex:1; }
+    .pill { font-size:10px;padding:2.5px 7px;border-radius:100px;font-weight:600;white-space:nowrap; }
+    .pill.clear { background:var(--clear-bg);color:var(--clear-c); }
+    .pill.blue  { background:var(--blue-bg); color:var(--blue-c); }
+    .pill.glass { background:var(--glass-bg);color:var(--glass-c); }
+    .pill.black { background:var(--black-bg);color:var(--black-c); }
+    .pill.food  { background:var(--food-bg); color:var(--food-c); }
+    .cal-badge { font-size:10px;color:var(--accent);font-weight:700;white-space:nowrap; }
+
+    .guide-grid { display:grid;grid-template-columns:1fr 1fr;gap:7px; }
+    .guide-tile { background:var(--glass);border:1px solid var(--border);border-radius:var(--rsm);padding:13px 12px; }
+    .guide-tile.full { grid-column:span 2; }
+    .guide-emo  { font-size:20px;display:block;margin-bottom:6px; }
+    .guide-ttl  { font-size:12.5px;font-weight:600;margin-bottom:3px; }
+    .guide-desc { font-size:11px;color:var(--muted);line-height:1.55; }
+
+    /* Info page */
+    #page-info { padding:20px 20px 0; }
+    .info-stack { display:flex;flex-direction:column;gap:9px;margin-top:12px; }
+    .info-card { background:var(--glass);border:1px solid var(--border);border-radius:var(--rsm);padding:15px; }
+    .info-card h3 { font-size:13px;font-weight:600;color:var(--accent);margin-bottom:7px; }
+    .info-card p  { font-size:12px;color:var(--muted);line-height:1.65; }
+    .info-card a  { color:var(--accent); }
+    .info-card strong { color:var(--text); }
+
+    /* Bottom nav */
+    .bottom-nav { position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(6,15,28,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:6px 0 max(6px,env(safe-area-inset-bottom)); }
+    .nav-btn { flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;background:none;border:none;color:var(--dim);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;cursor:pointer;transition:color .15s; }
+    .nav-btn svg { width:20px;height:20px; }
+    .nav-btn.active { color:var(--accent); }
+
+    /* Animations */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)} }
+    @keyframes spin   { to{transform:rotate(360deg)} }
+    .hidden { display:none !important; }
+  </style>
+</head>
+<body>
+
+<div id="bg" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div id="app">
+
+  <header class="header">
+    <div class="brand">
+      <div class="brand-mark">🗑️</div>
+      <div>
+        <div class="brand-name">Bin Night <em>Guernsey</em></div>
+        <div class="brand-sub">KERBSIDE COLLECTION</div>
+      </div>
+    </div>
+    <button class="icon-btn" id="btn-change" aria-label="Search different address">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ══ SEARCH PAGE ══ -->
+  <div id="page-search" class="page active">
+    <div class="search-hero">
+      <h1 class="search-hero-title">What's out<br><em>tonight?</em></h1>
+      <p class="search-hero-sub">Enter your address or postcode to see your exact collection schedule.</p>
+    </div>
+
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+        </span>
+        <input id="search-input" class="search-input" type="text"
+          placeholder="e.g. GY1 1AA or Les Gravées"
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </div>
+      <button class="btn-search" id="btn-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        Search
+      </button>
+    </div>
+
+    <div class="gps-row">
+      <div class="gps-divider"></div>
+      <button class="btn-gps" id="btn-gps">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 2v3m0 14v3M2 12h3m14 0h3"/>
+          <circle cx="12" cy="12" r="8" opacity="0.3"/>
+        </svg>
+        Use my location
+      </button>
+      <div class="gps-divider"></div>
+    </div>
+
+    <div id="search-feedback"></div>
+  </div>
+
+  <!-- ══ HOME PAGE ══ -->
+  <div id="page-home" class="page">
+    <div class="addr-strip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+      <span class="addr-strip-text" id="addr-strip-text">—</span>
+      <span class="addr-change" id="addr-change">Change</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-card">
+        <div class="hero-eyebrow" id="hero-eyebrow">NEXT COLLECTION</div>
+        <div class="hero-night"   id="hero-night">—</div>
+        <div class="hero-meta"    id="hero-meta"></div>
+        <div class="countdown"    id="countdown">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span id="countdown-txt">—</span>
+        </div>
+        <div class="bags" id="bags-grid"></div>
+      </div>
+    </div>
+
+    <div class="install-banner hidden" id="install-banner" role="button" tabindex="0">
+      <span class="install-banner-icon">📲</span>
+      <div class="install-banner-body">
+        <strong>Add to Home Screen</strong>
+        <span id="install-sub">Get this as an app on your phone</span>
+      </div>
+      <span class="install-banner-arrow">›</span>
+    </div>
+
+    <div class="section">
+      <p class="section-label">Upcoming Collections</p>
+      <div class="cal-list" id="cal-list"></div>
+    </div>
+
+    <div class="section" style="margin-bottom:8px">
+      <p class="section-label">What goes in each bag?</p>
+      <div class="guide-grid">
+        <div class="guide-tile"><span class="guide-emo">🗂️</span><div class="guide-ttl" style="color:var(--clear-c)">Clear Bag</div><div class="guide-desc">Paper, cardboard, magazines, envelopes</div></div>
+        <div class="guide-tile"><span class="guide-emo">♻️</span><div class="guide-ttl" style="color:var(--blue-c)">Blue Bag</div><div class="guide-desc">Plastics, tins, cans, cartons, foil</div></div>
+        <div class="guide-tile"><span class="guide-emo">🍶</span><div class="guide-ttl" style="color:var(--glass-c)">Glass Bag</div><div class="guide-desc">Clean bottles and jars</div></div>
+        <div class="guide-tile"><span class="guide-emo">🥕</span><div class="guide-ttl" style="color:var(--food-c)">Food Caddy</div><div class="guide-desc">All food scraps — collected every week</div></div>
+        <div class="guide-tile full"><span class="guide-emo">🖤</span><div class="guide-ttl" style="color:var(--black-c)">Black Bag</div><div class="guide-desc">General refuse — needs a pay-as-you-throw sticker. Orange for 50L, green for 90L. Fortnightly.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ INFO PAGE ══ -->
+  <div id="page-info" class="page">
+    <div style="padding-top:22px">
+      <p class="section-label" style="padding:0 20px 10px">About &amp; Help</p>
+    </div>
+    <div class="info-stack" style="padding:0 20px">
+      <div class="info-card"><h3>How it works</h3><p>Enter your address or postcode — we look it up directly from the official Guernsey Waste calendar and show your exact collection schedule. Food waste is collected every week. Blue and clear bags alternate fortnightly across the whole island.</p></div>
+      <div class="info-card"><h3>The bag rotation</h3><p><strong>Clear bag week</strong> — St Peter Port &amp; St Sampson: clear bags + food + glass. All other parishes: clear bags + food + black bags.<br><br><strong>Blue bag week</strong> — St Peter Port &amp; St Sampson: blue bags + food + black bags. All other parishes: blue bags + food + glass.</p></div>
+      <div class="info-card"><h3>Set out times</h3><p>Put bags out from <strong>8pm</strong>, no later than <strong>10:30pm</strong> the evening before collection. Dates shown are the set-out evening, not the morning of collection.</p></div>
+      <div class="info-card"><h3>Pay as you throw</h3><p>Every black bag needs a prepaid sticker. <strong>Orange</strong> for 50L bags, <strong>Green</strong> for 90L. Available from supermarkets and Guernsey Post.</p></div>
+      <div class="info-card"><h3>Missed a collection?</h3><p>Contact your Parish Constables via <a href="https://www.gov.gg/parishes" target="_blank" rel="noopener">gov.gg/parishes ↗</a></p></div>
+      <div class="info-card"><h3>Data source</h3><p>Collection schedules come live from <a href="https://guernsey.isl-fusion.com" target="_blank" rel="noopener">guernsey.isl-fusion.com ↗</a> — the official Guernsey Waste calendar.</p></div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<nav class="bottom-nav">
+  <button class="nav-btn active" data-page="search" id="nav-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Search
+  </button>
+  <button class="nav-btn" data-page="home" id="nav-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    My Night
+  </button>
+  <button class="nav-btn" data-page="info" id="nav-info">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    Info
+  </button>
+</nav>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────
+const FUSION  = 'https://guernsey.isl-fusion.com';
+const PROXY_A = 'https://corsproxy.io/?url=';
+const PROXY_B = 'https://api.allorigins.win/get?url=';
+
+// ── STATE ─────────────────────────────────────────────────────
+// collections: [{ date: Date, dayName, night(1=Mon…7=Sun), items:[{k,label,icon,sub}] }]
+let STATE = { address:null, viewHref:null, dayName:null, night:null, collections:[] };
+
+// ── ITEM → BAG MAPPING ────────────────────────────────────────
+// Maps the exact text from Fusion's alt attributes to our bag chip style
+const ITEM_MAP = [
+  { match: /food/i,                         k:'food',  label:'Food Caddy',       icon:'🥕', sub:'food waste' },
+  { match: /cans|plastic|carton/i,          k:'blue',  label:'Blue Bag',         icon:'♻️', sub:'plastics, tins & cans' },
+  { match: /paper|cardboard/i,              k:'clear', label:'Clear Bag',        icon:'🗂️', sub:'paper & cardboard' },
+  { match: /glass/i,                        k:'glass', label:'Glass Bag',        icon:'🍶', sub:'bottles & jars' },
+  { match: /residual|general|refuse|waste/i,k:'black', label:'Black Bag',        icon:'🖤', sub:'general refuse' },
+];
+
+function mapItem(text) {
+  for (const m of ITEM_MAP) if (m.match.test(text)) return { k:m.k, label:m.label, icon:m.icon, sub:m.sub };
+  return { k:'black', label: text.trim(), icon:'🗑️', sub:'' };
+}
+
+// ── MONTH PARSER ──────────────────────────────────────────────
+const MONTH_IDX = {january:0,february:1,march:2,april:3,may:4,june:5,
+                   july:6,august:7,september:8,october:9,november:10,december:11};
+const DOW_NAME  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DOW_ISO   = [7,1,2,3,4,5,6]; // JS getDay() → ISO weekday (Mon=1…Sun=7)
+
+function parseDate(str) {
+  // Handles "Sunday 1st March" or "1st March 2026" or "2026-03-01"
+  const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (iso) return new Date(+iso[1], +iso[2]-1, +iso[3]);
+  const long = str.match(/(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)(?:\s+(\d{4}))?/);
+  if (long) {
+    const mon = MONTH_IDX[long[2].toLowerCase()];
+    if (mon === undefined) return null;
+    const yr = long[3] ? +long[3] : new Date().getFullYear();
+    const d  = new Date(yr, mon, +long[1]);
+    // If date is in the past and no year was given, try next year
+    if (!long[3] && d < new Date()) d.setFullYear(d.getFullYear()+1);
+    return d;
+  }
+  return null;
+}
+
+// ── PARSE FUSION PAGE HTML ─────────────────────────────────────
+// Returns array of collection events from the nextCollectionSection
+function parseFusionPage(html) {
+  const events = [];
+
+  // ── Primary: parse the "Next Collections" section ─────────
+  // Structure: <h5><u>Sunday 1st March</u></h5> <ul>...<li>Item name</li>...</ul>
+  const sectionMatch = html.match(/<div[^>]+id="nextCollectionSection"[^>]*>([\s\S]*?)(?=<div\s+class="row)/i);
+  if (sectionMatch) {
+    const section = sectionMatch[1];
+    // Split on each <h5> date heading
+    const chunks = section.split(/<h5>/i).slice(1);
+    for (const chunk of chunks) {
+      const dateMatch = chunk.match(/<u>([^<]+)<\/u>/i);
+      if (!dateMatch) continue;
+      const dateStr = dateMatch[1].trim();
+      // dateStr looks like "Sunday 1st March" — strip the day name for parseDate
+      const dateOnly = dateStr.replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+/i, '');
+      const date = parseDate(dateOnly);
+      if (!date) continue;
+
+      const dow      = date.getDay();
+      const dayName  = DOW_NAME[dow];
+      const night    = DOW_ISO[dow];
+
+      // Extract li item text
+      const liMatches = [...chunk.matchAll(/<li[^>]*>[\s\S]*?<img[^>]*>[\s\S]*?([^<]+)/gi)];
+      const items = liMatches.map(m => mapItem(m[1].trim())).filter(Boolean);
+      if (items.length) events.push({ date, dayName, night, items });
+    }
+  }
+
+  // ── Fallback: parse the calendar table if nextCollectionSection had nothing ─
+  if (events.length === 0) {
+    // Look for <abbr title="DayName DDth Month"> cells that contain <img alt="ItemName">
+    const cellRe = /<td[^>]*>[\s\S]*?<abbr\s+title="([^"]+)"[\s\S]*?<\/td>/gi;
+    let cellMatch;
+    while ((cellMatch = cellRe.exec(html)) !== null) {
+      const cell = cellMatch[0];
+      if (!cell.includes('<img')) continue;
+      const titleFull = cellMatch[1]; // "Sunday 1st March"
+      const dateOnly  = titleFull.replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+/i,'');
+      const date      = parseDate(dateOnly);
+      if (!date) continue;
+      const dow      = date.getDay();
+      const imgAlts  = [...cell.matchAll(/alt="([^"]+)"/gi)].map(m => m[1]);
+      const items    = imgAlts.map(mapItem).filter(Boolean);
+      if (items.length) {
+        events.push({ date, dayName:DOW_NAME[dow], night:DOW_ISO[dow], items });
+      }
+    }
+  }
+
+  // Sort by date, deduplicate
+  events.sort((a,b) => a.date - b.date);
+  const seen = new Set();
+  return events.filter(e => { const k=e.date.toDateString(); if(seen.has(k)) return false; seen.add(k); return true; });
+}
+
+// ── CORS-AWARE FETCH ──────────────────────────────────────────
+async function proxyFetch(url, wantJson) {
+  try {
+    const r = await fetch(PROXY_A + encodeURIComponent(url),
+      { headers:{ 'X-Requested-With':'XMLHttpRequest' } });
+    if (r.ok) return wantJson ? r.json() : r.text();
+  } catch(_) {}
+  try {
+    const r = await fetch(PROXY_B + encodeURIComponent(url));
+    if (r.ok) {
+      const d = await r.json();
+      const body = d.contents || '';
+      if (wantJson) { try { return JSON.parse(body); } catch(_) { return body; } }
+      return body;
+    }
+  } catch(_) {}
+  throw new Error('Unable to reach the Guernsey Waste calendar. Please check your connection and try again.');
+}
+
+// ── FUSION API HELPERS ────────────────────────────────────────
+async function searchFusion(query) {
+  return proxyFetch(`${FUSION}/address/${encodeURIComponent(query.toLowerCase())}`, true);
+}
+
+function parseLinks(html) {
+  if (!html || !html.includes('/view/')) return [];
+  const out = [], re = /href="(\/view\/([^"\/]+)\/)"[^>]*>\s*([^<]+?)\s*<\/a>/gi;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const text = m[3].trim();
+    const pc   = (text.match(/\b(GY\d{1,2}\s+\d[A-Z]{2})\b/i) || [])[1];
+    out.push({ href:m[1], id:m[2], address:text, postcode: pc ? pc.toUpperCase() : null });
+  }
+  return out;
+}
+
+// Fetch a /view/ page and return parsed collection events
+async function fetchSchedule(href) {
+  const html = await proxyFetch(`${FUSION}${href}`, false);
+  const body = typeof html === 'string' ? html : (html?.contents || JSON.stringify(html));
+  return parseFusionPage(body);
+}
+
+// ── RENDER HOME ───────────────────────────────────────────────
+const MS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function daysUntil(d) { const now=new Date(); now.setHours(0,0,0,0); return Math.round((d-now)/86400000); }
+
+function renderHome() {
+  const { address, collections, dayName } = STATE;
+  if (!collections || collections.length === 0) return;
+
+  // Filter to upcoming (today counts as upcoming until midnight)
+  const now = new Date(); now.setHours(0,0,0,0);
+  const upcoming = collections.filter(e => e.date >= now);
+  if (upcoming.length === 0) return;
+
+  const next = upcoming[0];
+  const days = daysUntil(next.date);
+
+  document.getElementById('addr-strip-text').textContent = address || '—';
+
+  // Hero
+  document.getElementById('hero-eyebrow').textContent =
+    days===0 ? "TONIGHT'S SET OUT" : days===1 ? 'TOMORROW NIGHT' : 'NEXT COLLECTION';
+  document.getElementById('hero-night').textContent = `${next.dayName} Night`;
+  document.getElementById('hero-meta').textContent  = 'Put bags out 8pm – 10:30pm the evening before';
+
+  // Countdown
+  const cdEl = document.getElementById('countdown');
+  const cdTx = document.getElementById('countdown-txt');
+  cdTx.textContent = days===0 ? '🎉 Tonight — put bags out now!' : days===1 ? 'Tomorrow night' : `In ${days} days`;
+  cdEl.className   = 'countdown' + (days===0 ? ' tonight' : '');
+
+  // Bags grid — derived directly from Fusion's item list
+  const grid = document.getElementById('bags-grid');
+  grid.innerHTML = '';
+  next.items.forEach((b, i) => {
+    const el = document.createElement('div');
+    // Make food full-width if it's alone in the first slot, or keep grid layout
+    el.className = `bag-chip ${b.k}`;
+    el.innerHTML = `<span class="chip-emo">${b.icon}</span><span class="chip-info"><span class="chip-name">${b.label}</span><span class="chip-sub">${b.sub}</span></span>`;
+    grid.appendChild(el);
+  });
+
+  // Calendar — show all upcoming events we have
+  const calList = document.getElementById('cal-list');
+  calList.innerHTML = '';
+  upcoming.slice(0, 8).forEach((ev, i) => {
+    const row = document.createElement('div');
+    row.className = 'cal-row' + (i===0 ? ' next' : '');
+    const pills = ev.items.map(b => `<span class="pill ${b.k}">${b.icon} ${b.label}</span>`).join('');
+    const badge = i===0 ? `<span class="cal-badge">${days===0?'Tonight':'Next →'}</span>` : '';
+    row.innerHTML = `
+      <div class="cal-date">
+        <div class="cal-dow">${DS[ev.date.getDay()]}</div>
+        <div class="cal-dstr">${ev.date.getDate()} ${MS[ev.date.getMonth()]}</div>
+      </div>
+      <div class="cal-pills">${pills}</div>
+      ${badge}`;
+    calList.appendChild(row);
+  });
+
+  showPage('home');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page==='home'));
+}
+
+// ── SEARCH FLOW ───────────────────────────────────────────────
+function showFeedback(html){ document.getElementById('search-feedback').innerHTML=html; }
+function clearFeedback()   { document.getElementById('search-feedback').innerHTML=''; }
+
+function setBtnLoading(on) {
+  const btn = document.getElementById('btn-search');
+  btn.disabled = on;
+  btn.innerHTML = on
+    ? '<span class="spinner"></span>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Search';
+}
+
+function parseLinks2(html) {
+  if (!html || !html.includes('/view/')) return [];
+  const out = [];
+  const re = /href="(\/view\/([^"\/]+)\/)"[^>]*>\s*([^<]+?)\s*<\/a>/gi;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const text = m[3].trim();
+    const pc   = (text.match(/\b(GY\d{1,2}\s+\d[A-Z]{2})\b/i) || [])[1];
+    out.push({ href:m[1], id:m[2], address:text, postcode: pc ? pc.toUpperCase() : null });
+  }
+  return out;
+}
+
+async function doSearch(query) {
+  if (!query.trim()) return;
+  setBtnLoading(true);
+  clearFeedback();
+
+  try {
+    const data    = await searchFusion(query);
+    const rawHtml = data?.html || data?.contents || (typeof data==='string' ? data : '');
+    const links   = parseLinks2(rawHtml);
+
+    setBtnLoading(false);
+
+    if (links.length === 0) {
+      showFeedback(`<div class="msg error"><span class="msg-icon">⚠️</span><span>No addresses found for <strong>"${query}"</strong>. Try your postcode (e.g. GY1 1AA) or road name.</span></div>`);
+      return;
+    }
+
+    const tooMany = rawHtml.includes('too many results');
+    let html = `<div class="results-box">`;
+    if (tooMany) html += `<div class="results-refine">Showing first results — add your house number or name to narrow down</div>`;
+    html += `<div class="results-header">Select your address</div>`;
+    links.slice(0, 30).forEach((a) => {
+      const displayAddr = a.address.replace(/\.\s*GY\d[^,]*$/, '').trim();
+      html += `<div class="result-item" data-href="${a.href}" data-address="${encodeURIComponent(a.address)}">
+        <span class="result-icon">🏠</span>
+        <span class="result-text">
+          <span class="result-addr">${displayAddr}</span>
+          <span class="result-pc">${a.postcode||''}</span>
+        </span>
+        <span class="result-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span>
+      </div>`;
+    });
+    html += `</div>`;
+    showFeedback(html);
+
+    document.querySelectorAll('.result-item').forEach(el => {
+      el.addEventListener('click', () => selectAddress(el));
+    });
+
+  } catch(err) {
+    setBtnLoading(false);
+    showFeedback(`<div class="msg error"><span class="msg-icon">🌐</span><span>${err.message}</span></div>`);
+  }
+}
+
+async function selectAddress(el) {
+  const href    = el.dataset.href;
+  const address = decodeURIComponent(el.dataset.address);
+
+  el.innerHTML = `<span class="result-icon">⏳</span><span class="result-text"><span class="result-addr">Loading your schedule…</span></span>`;
+  document.querySelectorAll('.result-item').forEach(e => e.style.pointerEvents='none');
+
+  try {
+    const collections = await fetchSchedule(href);
+
+    if (!collections.length) {
+      document.querySelectorAll('.result-item').forEach(e => e.style.pointerEvents='');
+      showFeedback(`<div class="msg warn">
+        <span class="msg-icon">⚠️</span>
+        <span>Couldn't load the collection schedule for this address. Try selecting a neighbour, or visit <a href="https://guernsey.isl-fusion.com" target="_blank" rel="noopener" style="color:var(--accent2)">guernsey.isl-fusion.com ↗</a></span>
+      </div>`);
+      return;
+    }
+
+    const first = collections[0];
+    STATE = {
+      address,
+      viewHref: href,
+      dayName:  first.dayName,
+      night:    first.night,
+      collections,
+      savedAt:  Date.now(),
+    };
+    // Store serialisable version (dates as ISO strings)
+    const serialisable = { ...STATE, collections: collections.map(e => ({ ...e, date: e.date.toISOString() })) };
+    localStorage.setItem('bn_state', JSON.stringify(serialisable));
+    renderHome();
+
+  } catch(err) {
+    document.querySelectorAll('.result-item').forEach(e => e.style.pointerEvents='');
+    showFeedback(`<div class="msg error"><span class="msg-icon">🌐</span><span>${err.message}</span></div>`);
+  }
+}
+
+// ── GPS ───────────────────────────────────────────────────────
+async function doGPS() {
+  const btn = document.getElementById('btn-gps');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner spinner-blue"></span> Detecting…';
+  clearFeedback();
+
+  try {
+    if (!navigator.geolocation) throw new Error('Geolocation not supported on this device');
+    const pos = await new Promise((res,rej) =>
+      navigator.geolocation.getCurrentPosition(res, rej, { timeout:10000, enableHighAccuracy:true }));
+
+    const geo = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json&zoom=16`,
+      { headers:{ 'Accept-Language':'en', 'User-Agent':'BinNightGuernsey/1.0' } }
+    ).then(r => r.json());
+
+    if (!(geo.display_name||'').toLowerCase().includes('guernsey'))
+      throw new Error("Your location doesn\'t appear to be in Guernsey. Please search your address instead.");
+
+    const addr  = geo.address || {};
+    const query = addr.postcode
+      || geo.display_name.split(',').find(p => /GY\d/i.test(p))?.trim()
+      || '';
+
+    btn.disabled = false;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/><circle cx="12" cy="12" r="8" opacity="0.3"/></svg> Use my location`;
+    document.getElementById('search-input').value = query;
+    await doSearch(query);
+
+  } catch(err) {
+    btn.disabled = false;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/><circle cx="12" cy="12" r="8" opacity="0.3"/></svg> Use my location`;
+    const msg = err.code===1 ? 'Location permission was denied. Please search your address instead.' : err.message||'Location detection failed.';
+    showFeedback(`<div class="msg error"><span class="msg-icon">📍</span><span>${msg}</span></div>`);
+  }
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(`page-${name}`).classList.add('active');
+}
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const page = btn.dataset.page;
+    if (page==='home' && !STATE.collections?.length) {
+      showPage('search');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page==='search'));
+      return;
+    }
+    showPage(page);
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page===page));
+  });
+});
+
+function goToSearch() {
+  showPage('search');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page==='search'));
+  clearFeedback();
+  if (STATE.address) document.getElementById('search-input').value = STATE.address;
+}
+document.getElementById('btn-change').addEventListener('click', goToSearch);
+document.getElementById('addr-change').addEventListener('click', goToSearch);
+document.getElementById('btn-search').addEventListener('click', () => doSearch(document.getElementById('search-input').value.trim()));
+document.getElementById('search-input').addEventListener('keydown', e => { if (e.key==='Enter') doSearch(e.target.value.trim()); });
+document.getElementById('btn-gps').addEventListener('click', doGPS);
+
+// ── PWA INSTALL ───────────────────────────────────────────────
+let installPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); installPrompt = e;
+  document.getElementById('install-banner').classList.remove('hidden');
+});
+const ib = document.getElementById('install-banner');
+ib.addEventListener('click', async () => {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  const { outcome } = await installPrompt.userChoice;
+  if (outcome==='accepted') { ib.classList.add('hidden'); installPrompt=null; }
+});
+ib.addEventListener('keydown', e => { if (e.key==='Enter') ib.click(); });
+
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+if (isIOS && !isStandalone) {
+  setTimeout(() => {
+    document.getElementById('install-banner').classList.remove('hidden');
+    document.getElementById('install-sub').textContent = 'Tap Share then "Add to Home Screen" in Safari';
+  }, 2000);
+}
+
+// ── PWA MANIFEST + SERVICE WORKER ────────────────────────────
+const manifest = {name:'Bin Night Guernsey',short_name:'Bin Night',description:'Know exactly what to put out tonight.',start_url:'./',display:'standalone',orientation:'portrait-primary',theme_color:'#060f1c',background_color:'#060f1c',icons:[{src:`data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%23060f1c'/><rect x='150' y='215' width='212' height='200' rx='22' fill='%233db8f5' opacity='.9'/><rect x='128' y='158' width='256' height='60' rx='20' fill='%233db8f5'/><path d='M196 120 L196 158 M256 108 L256 158 M316 120 L316 158' stroke='%233db8f5' stroke-width='18' stroke-linecap='round'/></svg>`,sizes:'512x512',type:'image/svg+xml',purpose:'any maskable'}]};
+const mBlob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
+document.head.appendChild(Object.assign(document.createElement('link'), {rel:'manifest', href:URL.createObjectURL(mBlob)}));
+document.head.appendChild(Object.assign(document.createElement('link'), {rel:'apple-touch-icon', href:manifest.icons[0].src}));
+
+if ('serviceWorker' in navigator) {
+  const sw = `const V='bn-v4';self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(['./'])).then(()=>self.skipWaiting()))});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(h=>h||fetch(e.request).then(r=>{const c=r.clone();caches.open(V).then(ca=>ca.put(e.request,c));return r}).catch(()=>caches.match('./'))))});`;
+  try { navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})),{scope:'./'}); } catch(_) {}
+}
+
+// ── MIDNIGHT REFRESH ──────────────────────────────────────────
+function scheduleMidnight() {
+  const now=new Date(), next=new Date(now);
+  next.setDate(now.getDate()+1); next.setHours(0,1,0,0);
+  setTimeout(() => { if (STATE.collections?.length) renderHome(); scheduleMidnight(); }, next-now);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+(function init() {
+  try {
+    const s = localStorage.getItem('bn_state');
+    if (s) {
+      const saved = JSON.parse(s);
+      // Rehydrate date strings back to Date objects
+      if (saved.collections?.length) {
+        saved.collections = saved.collections.map(e => ({ ...e, date: new Date(e.date) }));
+        STATE = saved;
+        renderHome();
+      }
+    }
+  } catch(_) {}
+  scheduleMidnight();
+})();
+</script>
+</body>
+</html>
