@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Bin Night Guernsey</title>
+  <meta name="description" content="Privacy policy for Bin Night Guernsey — bins.tedde.tech">
+  <meta name="robots" content="index, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23060f1c'/%3E%3Crect x='9' y='14' width='14' height='13' rx='2' fill='%233db8f5'/%3E%3Crect x='7' y='10' width='18' height='5' rx='2' fill='%233db8f5'/%3E%3Cpath d='M13 7.5 L13 10 M16 6.5 L16 10 M19 7.5 L19 10' stroke='%233db8f5' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg:#060f1c; --surface:#0c1e35; --surface2:#102540;
+      --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.13);
+      --text:#ddeeff; --muted:rgba(221,238,255,0.55); --dim:rgba(221,238,255,0.28);
+      --accent:#3db8f5; --r:14px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{height:100%;scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100%;-webkit-font-smoothing:antialiased;line-height:1.7}
+
+    #bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.4}
+    .blob-1{width:600px;height:600px;background:radial-gradient(circle,rgba(15,60,140,.5) 0%,transparent 70%);bottom:-200px;left:-150px}
+    .blob-2{width:400px;height:400px;background:radial-gradient(circle,rgba(5,100,80,.25) 0%,transparent 70%);top:60px;right:-100px}
+
+    .page-wrap{position:relative;z-index:1;max-width:740px;margin:0 auto;padding:40px 24px 80px}
+
+    /* Header */
+    .site-header{display:flex;align-items:center;gap:12px;margin-bottom:48px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+    .brand-mark{width:38px;height:38px;background:linear-gradient(135deg,#0e2a52,#071830);border:1px solid rgba(61,184,245,.25);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;text-decoration:none}
+    .brand-name{font-family:'Fraunces',serif;font-size:17px;font-weight:500;letter-spacing:-.01em;color:var(--text);text-decoration:none}
+    .brand-name em{color:var(--accent);font-style:italic}
+    .back-link{margin-left:auto;font-size:12.5px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:5px;opacity:.8;transition:opacity .15s}
+    .back-link:hover{opacity:1}
+
+    /* Title block */
+    .policy-title{font-family:'Fraunces',serif;font-size:clamp(28px,5vw,42px);font-weight:500;letter-spacing:-.02em;line-height:1.1;margin-bottom:12px}
+    .policy-title em{color:var(--accent);font-style:italic}
+    .policy-meta{font-size:13px;color:var(--muted);margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+    .policy-meta strong{color:var(--text)}
+
+    /* Sections */
+    .policy-section{margin-bottom:40px}
+    .policy-section h2{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:.02em;text-transform:uppercase;margin-bottom:14px;padding-top:4px}
+    .policy-section p{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:12px}
+    .policy-section p:last-child{margin-bottom:0}
+    .policy-section ul{padding-left:20px;margin-bottom:12px}
+    .policy-section ul li{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:6px}
+    .policy-section strong{color:var(--text)}
+    .policy-section a{color:var(--accent)}
+    .policy-section a:hover{text-decoration:underline}
+
+    /* Highlight box */
+    .highlight-box{background:rgba(61,184,245,.05);border:1px solid rgba(61,184,245,.15);border-radius:var(--r);padding:18px 20px;margin-bottom:16px}
+    .highlight-box p{margin:0;font-size:13.5px}
+
+    /* Anchor targets */
+    #cookies{scroll-margin-top:32px}
+    #advertising{scroll-margin-top:32px}
+    #data{scroll-margin-top:32px}
+    #contact{scroll-margin-top:32px}
+
+    /* Footer */
+    .policy-footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+    .policy-footer p{font-size:12px;color:var(--dim)}
+    .policy-footer a{color:var(--accent);font-size:12px;text-decoration:none}
+    .policy-footer a:hover{text-decoration:underline}
+
+    @media(max-width:500px){
+      .page-wrap{padding:24px 18px 60px}
+      .site-header{margin-bottom:32px}
+      .back-link span{display:none}
+    }
+  </style>
+</head>
+<body>
+
+<div id="bg" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+</div>
+
+<div class="page-wrap">
+
+  <header class="site-header">
+    <a class="brand-mark" href="/" aria-label="Bin Night Guernsey home">🗑️</a>
+    <a class="brand-name" href="/">Bin Night <em>Guernsey</em></a>
+    <a class="back-link" href="/">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      <span>Back to app</span>
+    </a>
+  </header>
+
+  <h1 class="policy-title">Privacy <em>Policy</em></h1>
+  <div class="policy-meta">
+    <strong>Bin Night Guernsey</strong> — bins.tedde.tech<br>
+    Last updated: <strong>February 2026</strong> &nbsp;·&nbsp;
+    <a href="#contact">Questions? Contact us ↓</a>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong>The short version:</strong> Bin Night Guernsey is a free tool that helps Guernsey residents check their bin collection schedule. We don't ask you to create an account. We don't sell your personal data. Your address lookups are your own business. We may show ads via Google AdSense which uses cookies — you can opt out of personalised ads at any time.</p>
+  </div>
+
+  <!-- ── WHO WE ARE ── -->
+  <div class="policy-section">
+    <h2>Who we are</h2>
+    <p>Bin Night Guernsey (<strong>bins.tedde.tech</strong>) is an independent, community-built web application operated by Marcus Tedde. It is not affiliated with the States of Guernsey, Guernsey Waste, or ISL Fusion.</p>
+    <p>Collection schedule data is sourced live from the official Guernsey Waste calendar at <a href="https://guernsey.isl-fusion.com" target="_blank" rel="noopener">guernsey.isl-fusion.com</a>. We display this data for convenience but cannot guarantee its accuracy — always check the official source for confirmation.</p>
+  </div>
+
+  <!-- ── WHAT DATA WE COLLECT ── -->
+  <div class="policy-section" id="data">
+    <h2>What data we collect</h2>
+    <p>We aim to collect as little data as possible. Here is what the app uses:</p>
+    <ul>
+      <li><strong>Address searches:</strong> When you type an address or postcode to look up your collection schedule, that query is sent via our Cloudflare Worker proxy to the Guernsey Waste calendar. We do not log or store your search queries on our servers.</li>
+      <li><strong>GPS location:</strong> If you tap "Use my location", your device's GPS coordinates are sent to OpenStreetMap's Nominatim service (a third-party reverse-geocoding service) to identify your postcode. Only the postcode is then used for the address lookup — your precise coordinates are not stored by us.</li>
+      <li><strong>Saved addresses:</strong> Any addresses you choose to save are stored exclusively in your browser's <strong>localStorage</strong> — they remain on your device only and are never sent to our servers.</li>
+      <li><strong>Notification preferences:</strong> If you enable collection reminders, your preference is stored in your browser's localStorage on your device only.</li>
+      <li><strong>Analytics:</strong> We may use Google Analytics or similar tools to understand aggregate usage (e.g. how many visitors we receive). This does not identify you personally.</li>
+    </ul>
+  </div>
+
+  <!-- ── COOKIES ── -->
+  <div class="policy-section" id="cookies">
+    <h2>Cookies &amp; local storage</h2>
+    <p>This site uses browser <strong>localStorage</strong> (similar to cookies) to remember your saved addresses and preferences between visits. This data never leaves your device.</p>
+    <p>If Google AdSense ads are active on this site, Google may set cookies on your device to personalise the ads you see. These are third-party cookies managed by Google, not by us.</p>
+    <p><strong>Types of cookies used:</strong></p>
+    <ul>
+      <li><strong>Essential (localStorage):</strong> Stores your saved addresses and reminder settings locally on your device. Required for core app functionality.</li>
+      <li><strong>Analytics cookies (Google):</strong> Used to understand how visitors use the site in aggregate. You can opt out via <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out</a>.</li>
+      <li><strong>Advertising cookies (Google AdSense):</strong> Used to serve relevant advertisements. See below for how to manage these.</li>
+    </ul>
+    <p>You can clear all locally stored data at any time by clearing your browser's site data for this domain, or by using your browser's settings.</p>
+  </div>
+
+  <!-- ── ADVERTISING ── -->
+  <div class="policy-section" id="advertising">
+    <h2>Advertising</h2>
+    <p>This site may display advertisements served by <strong>Google AdSense</strong>. Google uses cookies and device identifiers to show you ads that are relevant to your interests based on your browsing activity across websites.</p>
+    <p>As a publisher, we do not control which specific ads are shown, and we do not have access to any data Google collects for advertising purposes.</p>
+    <p><strong>Your choices:</strong></p>
+    <ul>
+      <li>Opt out of personalised advertising via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ad Settings ↗</a></li>
+      <li>Opt out of interest-based advertising via <a href="https://www.youronlinechoices.com" target="_blank" rel="noopener">Your Online Choices ↗</a> (EU/UK)</li>
+      <li>Use your browser's built-in ad and tracker blocking features</li>
+    </ul>
+    <p>For more information on how Google uses data in advertising, see <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google's advertising policies ↗</a>.</p>
+  </div>
+
+  <!-- ── THIRD PARTY SERVICES ── -->
+  <div class="policy-section">
+    <h2>Third-party services</h2>
+    <p>This app connects to the following third-party services to function:</p>
+    <ul>
+      <li><strong>ISL Fusion / Guernsey Waste</strong> (<a href="https://guernsey.isl-fusion.com" target="_blank" rel="noopener">guernsey.isl-fusion.com</a>) — provides bin collection schedule data. Requests are proxied via our Cloudflare Worker. Subject to <a href="https://guernsey.isl-fusion.com" target="_blank" rel="noopener">ISL Fusion's terms</a>.</li>
+      <li><strong>Cloudflare</strong> — provides our proxy worker and DNS. Cloudflare may log request metadata (IP addresses, timestamps) in accordance with their <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Privacy Policy ↗</a>.</li>
+      <li><strong>OpenStreetMap Nominatim</strong> — used for GPS reverse geocoding (postcode lookup from coordinates). Subject to <a href="https://osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">OSM's Privacy Policy ↗</a>.</li>
+      <li><strong>Google Fonts</strong> — fonts are loaded from Google's servers, which may log your IP address. Subject to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy ↗</a>.</li>
+      <li><strong>Google AdSense / Google Analytics</strong> — if active, subject to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy ↗</a>.</li>
+    </ul>
+  </div>
+
+  <!-- ── YOUR RIGHTS ── -->
+  <div class="policy-section">
+    <h2>Your rights</h2>
+    <p>Under UK GDPR and applicable data protection law, you have the right to:</p>
+    <ul>
+      <li>Access the personal data we hold about you</li>
+      <li>Request correction or deletion of your personal data</li>
+      <li>Object to or restrict processing of your data</li>
+      <li>Withdraw consent at any time where processing is based on consent</li>
+    </ul>
+    <p>Because we store virtually no personal data on our servers (all preferences are stored locally on your device), most of these rights are exercisable directly by you — simply clear your browser's site data for bins.tedde.tech.</p>
+    <p>For any other requests, contact us using the details below.</p>
+  </div>
+
+  <!-- ── CHILDREN ── -->
+  <div class="policy-section">
+    <h2>Children's privacy</h2>
+    <p>This service is not directed at children under the age of 13. We do not knowingly collect personal data from children. If you believe a child has provided us with personal information, please contact us and we will take steps to delete it.</p>
+  </div>
+
+  <!-- ── CHANGES ── -->
+  <div class="policy-section">
+    <h2>Changes to this policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we do, we will update the "Last updated" date at the top of this page. Continued use of the site after changes are posted constitutes your acceptance of the updated policy.</p>
+  </div>
+
+  <!-- ── CONTACT ── -->
+  <div class="policy-section" id="contact">
+    <h2>Contact</h2>
+    <p>If you have any questions about this Privacy Policy or how your data is handled, please contact:</p>
+    <div class="highlight-box" style="margin-top:8px">
+      <p><strong>Marcus Tedde</strong><br>
+      Website: <a href="https://tedde.tech" target="_blank" rel="noopener">tedde.tech</a><br>
+      App: <a href="/">bins.tedde.tech</a></p>
+    </div>
+    <p>We aim to respond to all privacy enquiries within 30 days.</p>
+  </div>
+
+  <footer class="policy-footer">
+    <p>© 2026 Bin Night Guernsey &nbsp;·&nbsp; Independent community tool, not affiliated with States of Guernsey</p>
+    <a href="/">← Back to app</a>
+  </footer>
+
+</div>
+</body>
+</html>
