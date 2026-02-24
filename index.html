@@ -10,6 +10,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Bin Night">
   <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23060f1c'/%3E%3Crect x='9' y='14' width='14' height='13' rx='2' fill='%233db8f5'/%3E%3Crect x='7' y='10' width='18' height='5' rx='2' fill='%233db8f5'/%3E%3Cpath d='M13 7.5 L13 10 M16 6.5 L16 10 M19 7.5 L19 10' stroke='%233db8f5' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23060f1c'/%3E%3Crect x='9' y='14' width='14' height='13' rx='2' fill='%233db8f5'/%3E%3Crect x='7' y='10' width='18' height='5' rx='2' fill='%233db8f5'/%3E%3Cpath d='M13 7.5 L13 10 M16 6.5 L16 10 M19 7.5 L19 10' stroke='%233db8f5' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23060f1c'/%3E%3Crect x='9' y='14' width='14' height='13' rx='2' fill='%233db8f5'/%3E%3Crect x='7' y='10' width='18' height='5' rx='2' fill='%233db8f5'/%3E%3Cpath d='M13 7.5 L13 10 M16 6.5 L16 10 M19 7.5 L19 10' stroke='%233db8f5' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
@@ -209,6 +212,12 @@
     .ios-arrow-bubble{background:var(--accent2);color:#060f1c;font-size:12px;font-weight:700;padding:9px 18px;border-radius:100px;white-space:nowrap;animation:bob .9s ease-in-out infinite alternate;display:inline-block}
     .ios-arrow-bubble::after{content:'';display:block;width:0;height:0;border:8px solid transparent;border-top:8px solid var(--accent2);border-bottom:0;margin:-1px auto -9px;position:relative;top:8px}
 
+
+    /* ── AD SLOT ── */
+    .ad-slot{margin:0 20px;padding:12px;background:rgba(255,255,255,.025);border:1px dashed rgba(255,255,255,.1);border-radius:var(--rsm);text-align:center;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+    .ad-slot-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);font-weight:600}
+    .ad-slot-inner{width:100%;max-width:320px;min-height:50px;background:rgba(255,255,255,.02);border-radius:6px;display:flex;align-items:center;justify-content:center}
+    @media(min-width:900px){.ad-slot{margin:0 32px;min-height:120px}.ad-slot-inner{max-width:728px;min-height:90px}}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
     @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
     @keyframes bob{from{transform:translateY(0)}to{transform:translateY(-7px)}}
@@ -403,6 +412,27 @@
       <p class="section-label">Upcoming Collections</p>
       <div class="cal-list" id="cal-list"></div>
     </div>
+    <!-- ══ AD SLOT ══
+         Replace the ad-slot-inner div content with your AdSense <ins> tag once approved.
+         AdSense auto ads will also work if you just paste the AdSense <script> in <head>.
+    -->
+    <div class="section" id="ad-section">
+      <div class="ad-slot">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner" id="ad-slot-inner">
+          <!-- AdSense code goes here, e.g:
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+          -->
+        </div>
+      </div>
+    </div>
+
     <div class="section" style="margin-bottom:8px">
       <p class="section-label">What goes in each bag?</p>
       <div class="guide-grid">
@@ -426,12 +456,14 @@
       <div class="info-card"><h3>Pay as you throw</h3><p>Every black bag needs a prepaid sticker. <strong>Orange</strong> for 50L, <strong>Green</strong> for 90L. Available from supermarkets and Guernsey Post.</p></div>
       <div class="info-card"><h3>Missed a collection?</h3><p>Contact your Parish Constables via <a href="https://www.gov.gg/parishes" target="_blank" rel="noopener">gov.gg/parishes ↗</a></p></div>
       <div class="info-card"><h3>Data source</h3><p>Schedules come live from <a href="https://guernsey.isl-fusion.com" target="_blank" rel="noopener">guernsey.isl-fusion.com ↗</a> — the official Guernsey Waste calendar.</p></div>
+      <div class="info-card"><h3>Legal</h3><p>This site uses cookies and may display personalised ads. <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy ↗</a> &nbsp;·&nbsp; <a href="privacy.html#cookies" target="_blank" rel="noopener">Cookie Policy ↗</a><br><br>Bin Night Guernsey is an independent tool, not affiliated with the States of Guernsey or ISL Fusion.</p></div>
     </div>
   </div>
 
 </div>
 
 <div class="toast" id="toast"></div>
+<div style="position:fixed;bottom:0;left:0;right:0;z-index:49;pointer-events:none;display:flex;justify-content:center;padding-bottom:max(4px,env(safe-area-inset-bottom))"><a href="privacy.html" target="_blank" rel="noopener" style="pointer-events:all;font-size:9px;color:rgba(221,238,255,.2);text-decoration:none;letter-spacing:.5px;padding:2px 8px" aria-label="Privacy Policy">Privacy Policy</a></div>
 
 <nav class="bottom-nav">
   <button class="nav-btn active" data-page="search" id="nav-search">
