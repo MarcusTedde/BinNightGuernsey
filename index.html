@@ -499,7 +499,9 @@ const ITEM_MAP=[
   {match:/glass/i,         k:'glass',label:'Glass Bag', icon:'🍶',sub:'bottles & jars'},
   {match:/residual|general|refuse|waste/i,k:'black',label:'Black Bag',icon:'🖤',sub:'general refuse'},
 ];
-function mapItem(t){for(const m of ITEM_MAP)if(m.match.test(t))return{k:m.k,label:m.label,icon:m.icon,sub:m.sub};return{k:'black',label:t.trim(),icon:'🗑️',sub:''};}
+function mapItem(t){for(const m of ITEM_MAP)if(m.match.test(t))return{k:m.k,label:m.label,icon:m.icon,sub:m.sub};return{k:'black',label:t.trim(),icon:'🗑️',sub:''};
+}
+function decodeHtml(str){const el=document.createElement('textarea');el.innerHTML=str;return el.value.replace(/''/g,"'");}
 
 const MONTH_IDX={january:0,february:1,march:2,april:3,may:4,june:5,july:6,august:7,september:8,october:9,november:10,december:11};
 const DOW_NAME=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -511,10 +513,10 @@ function parseDate(s){
   const iso=s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if(iso)return new Date(+iso[1],+iso[2]-1,+iso[3]);
   const lg=s.match(/(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)(?:\s+(\d{4}))?/);
-  if(lg){const mon=MONTH_IDX[lg[2].toLowerCase()];if(mon===undefined)return null;const yr=lg[3]?+lg[3]:new Date().getFullYear();const d=new Date(yr,mon,+lg[1]);if(!lg[3]&&d<new Date())d.setFullYear(d.getFullYear()+1);return d;}
+  if(lg){const mon=MONTH_IDX[lg[2].toLowerCase()];if(mon===undefined)return null;const yr=lg[3]?+lg[3]:new Date().getFullYear();const d=new Date(yr,mon,+lg[1]);const midnight=new Date();midnight.setHours(0,0,0,0);if(!lg[3]&&d<midnight)d.setFullYear(d.getFullYear()+1);return d;}
   return null;
 }
-function daysUntil(d){const n=new Date();n.setHours(0,0,0,0);return Math.round((d-n)/86400000);}
+function daysUntil(d){const n=new Date();n.setHours(0,0,0,0);const dc=new Date(d);dc.setHours(0,0,0,0);return Math.round((dc-n)/86400000);}
 function timeAgo(ts){const d=Math.round((Date.now()-ts)/86400000);return d===0?'today':d===1?'yesterday':d+' days ago';}
 
 function parseFusionPage(html){
@@ -549,11 +551,15 @@ async function proxyFetch(url,wj){
   try{const r=await fetch(PROXY_B+encodeURIComponent(url),{headers:{'X-Requested-With':'XMLHttpRequest'}});if(r.ok)return wj?r.json():r.text();}catch(_){}
   throw new Error('Unable to reach the Guernsey Waste calendar. Please check your connection.');
 }
-async function searchFusion(q){return proxyFetch(`${FUSION}/address/${encodeURIComponent(q.toLowerCase())}`,true);}
+async function searchFusion(q){
+  // Fusion requires apostrophes doubled (e.g. L'Abri → L''Abri)
+  const fq=q.replace(/'/g,"''");
+  return proxyFetch(`${FUSION}/address/${encodeURIComponent(fq.toLowerCase())}`,true);
+}
 async function fetchSchedule(href){const h=await proxyFetch(`${FUSION}${href}`,false);return parseFusionPage(typeof h==='string'?h:(h?.contents||JSON.stringify(h)));}
 
 function ser(s){return{...s,collections:s.collections.map(e=>({...e,date:e.date.toISOString()}))};}
-function des(r){return{...r,collections:(r.collections||[]).map(e=>({...e,date:new Date(e.date)}))};}
+function des(r){return{...r,collections:(r.collections||[]).map(e=>{const d=new Date(e.date);d.setHours(0,0,0,0);return{...e,date:d};})};}
 function saveState(){localStorage.setItem('bn_state',JSON.stringify(ser(STATE)));}
 function loadState(){try{const s=localStorage.getItem('bn_state');if(s)STATE=des(JSON.parse(s));}catch(_){}}
 function saveSaved(){localStorage.setItem('bn_saved',JSON.stringify(SAVED));}
@@ -616,7 +622,7 @@ async function loadFromSaved(entry){
   try{
     const cols=await fetchSchedule(entry.viewHref);
     if(!cols.length){showFeedback('<div class="msg error"><span class="msg-icon">⚠️</span><span>Couldn\'t load that schedule.</span></div>');return;}
-    STATE={address:entry.address,viewHref:entry.viewHref,dayName:cols[0].dayName,night:cols[0].night,collections:cols,savedAt:Date.now()};
+    STATE={address:decodeHtml(entry.address),viewHref:entry.viewHref,dayName:cols[0].dayName,night:cols[0].night,collections:cols,savedAt:Date.now()};
     saveState();const saved=findSaved(entry.viewHref);if(saved){saved.dayName=STATE.dayName;saved.night=STATE.night;saveSaved();}
     clearFeedback();renderHome();if(notifEnabled())scheduleNotifications(cols,entry.address.split(',')[0]);
   }catch(err){showFeedback(`<div class="msg error"><span class="msg-icon">🌐</span><span>${err.message}</span></div>`);}
@@ -641,7 +647,7 @@ function updateStaleBar(){
 function renderHome(){
   const{address,collections}=STATE;if(!collections?.length)return;
   const now=new Date();now.setHours(0,0,0,0);
-  const upcoming=collections.filter(e=>e.date>=now);if(!upcoming.length)return;
+  const upcoming=collections.filter(e=>{const d=new Date(e.date);d.setHours(0,0,0,0);return d>=now;});if(!upcoming.length)return;
   const next=upcoming[0],days=daysUntil(next.date);
 
   document.getElementById('addr-strip-text').textContent=address||'—';
@@ -683,14 +689,14 @@ async function doSearch(query){
     let html='<div class="results-box">';
     if(raw.includes('too many results'))html+='<div class="results-refine">Showing first results — add your house number to narrow down</div>';
     html+='<div class="results-header">Select your address</div>';
-    links.slice(0,30).forEach(a=>{const disp=a.address.replace(/\.\s*GY\d[^,]*$/,'').trim();html+=`<div class="result-item" data-href="${a.href}" data-address="${encodeURIComponent(a.address)}"><span class="result-icon">🏠</span><span class="result-text"><span class="result-addr">${disp}</span><span class="result-pc">${a.postcode||''}</span></span><span class="result-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span></div>`;});
+    links.slice(0,30).forEach(a=>{a.address=decodeHtml(a.address);const disp=a.address.replace(/\.\s*GY\d[^,]*$/,'').trim();html+=`<div class="result-item" data-href="${a.href}" data-address="${encodeURIComponent(a.address)}"><span class="result-icon">🏠</span><span class="result-text"><span class="result-addr">${disp}</span><span class="result-pc">${a.postcode||''}</span></span><span class="result-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span></div>`;});
     html+='</div>';showFeedback(html);
     document.querySelectorAll('.result-item').forEach(el=>el.addEventListener('click',()=>selectAddress(el)));
   }catch(err){setBtnLoading(false);showFeedback(`<div class="msg error"><span class="msg-icon">🌐</span><span>${err.message}</span></div>`);}
 }
 
 async function selectAddress(el){
-  const href=el.dataset.href,address=decodeURIComponent(el.dataset.address);
+  const href=el.dataset.href,address=decodeHtml(decodeURIComponent(el.dataset.address));
   el.innerHTML=`<span class="result-icon">⏳</span><span class="result-text"><span class="result-addr">Loading your schedule…</span></span>`;
   document.querySelectorAll('.result-item').forEach(e=>e.style.pointerEvents='none');
   try{
@@ -900,7 +906,7 @@ function scheduleMidnight(){const now=new Date(),next=new Date(now);next.setDate
       if(cols.length){
         const h=await proxyFetch(FUSION+viewParam,false);
         const tm=(typeof h==='string'?h:'').match(/<h4[^>]*class="text-center"[^>]*>([^<]+)<\/h4>/i);
-        STATE={address:tm?tm[1].trim():'Shared address',viewHref:viewParam,dayName:cols[0].dayName,night:cols[0].night,collections:cols,savedAt:Date.now()};
+        STATE={address:decodeHtml(tm?tm[1].trim():'Shared address'),viewHref:viewParam,dayName:cols[0].dayName,night:cols[0].night,collections:cols,savedAt:Date.now()};
         saveState();clearFeedback();renderHome();window.history.replaceState({},'',window.location.pathname);
       }else showFeedback('<div class="msg error"><span class="msg-icon">⚠️</span><span>Couldn\'t load the shared schedule.</span></div>');
     }catch(_){showFeedback('<div class="msg error"><span class="msg-icon">🌐</span><span>Couldn\'t load the shared schedule.</span></div>');}
