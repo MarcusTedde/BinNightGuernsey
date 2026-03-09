@@ -918,7 +918,7 @@ function renderHome(){
   document.getElementById('addr-strip-text').textContent=address||'—';
   document.getElementById('hero-eyebrow').textContent=days===0?"TONIGHT'S SET OUT":days===1?'TOMORROW NIGHT':'NEXT COLLECTION';
   document.getElementById('hero-night').textContent=next.dayName+' Night';
-  document.getElementById('hero-meta').textContent=days===0?'Put bags out 8pm – 10:30pm tonight':'Put bags out 8pm – 10:30pm the evening before';
+  document.getElementById('hero-meta').textContent=days===0?'Put bags out 8pm – 10:30pm tonight':'Put bags out 8pm – 10:30pm on the night shown';
   const cd=document.getElementById('countdown');
   document.getElementById('countdown-txt').textContent=days===0?'🎉 Tonight — put bags out tonight!':days===1?'Tomorrow night':`In ${days} days`;
   cd.className='countdown'+(days===0?' tonight':'');
