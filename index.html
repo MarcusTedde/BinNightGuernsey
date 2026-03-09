@@ -18,6 +18,10 @@
     (function(){
       const t=localStorage.getItem('bn_theme')||(window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark');
       if(t==='light')document.documentElement.classList.add('light');
+      const f=localStorage.getItem('bn_font');
+      if(f==='md')document.documentElement.classList.add('text-md');
+      if(f==='lg')document.documentElement.classList.add('text-lg');
+      if(localStorage.getItem('bn_contrast')==='1')document.documentElement.classList.add('hi-con');
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -273,6 +277,9 @@
     html.light .install-banner:hover{background:rgba(10,143,212,.1)}
     html.light .stale-bar{background:rgba(176,94,0,.06);border-color:rgba(176,94,0,.18)}
     html.light .bottom-nav{background:rgba(240,245,252,.95)}
+    html.light .header{background:rgba(228,237,250,.92);border-bottom-color:rgba(0,0,0,.1)}
+    @media(min-width:900px){html.light .header{background:rgba(228,237,250,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}}
+    html.light .brand-sub{color:rgba(13,30,53,.45)}
     html.light .onboard-sheet{background:linear-gradient(170deg,#f5f9ff 0%,#eef4fc 100%)}
     html.light .toast{background:#e8f4fc;border-color:rgba(10,143,212,.3);color:var(--text)}
     html.light .msg.error{background:rgba(208,64,64,.07);border-color:rgba(208,64,64,.18);color:#b02020}
@@ -309,6 +316,109 @@
     html.light .btn-theme .icon-moon{display:none}
     /* on desktop, put theme toggle at end of nav */
     @media(min-width:900px){.btn-theme{margin-left:8px}}
+
+
+    /* ══ ACCESSIBILITY ══════════════════════════════════════════════════════════ */
+
+    /* Font sizes */
+    html.text-md { font-size: 106%; }
+    html.text-lg { font-size: 115%; }
+
+    html.text-md .hero-night { font-size: 38px; }
+    html.text-md .search-hero-title { font-size: 31px; }
+    html.text-md .bag-chip { font-size: 13.5px; }
+    html.text-md .cal-dow { font-size: 14px; }
+    html.text-md .cal-dstr { font-size: 12px; }
+    html.text-md .pill { font-size: 11.5px; }
+    html.text-md .guide-ttl { font-size: 14px; }
+    html.text-md .guide-desc { font-size: 12.5px; }
+    html.text-md .info-card p { font-size: 13.5px; }
+
+    html.text-lg .hero-night { font-size: 44px; }
+    html.text-lg .search-hero-title { font-size: 34px; }
+    html.text-lg .bag-chip { font-size: 15px; }
+    html.text-lg .chip-sub { font-size: 12px; }
+    html.text-lg .cal-dow { font-size: 15px; }
+    html.text-lg .cal-dstr { font-size: 13px; }
+    html.text-lg .pill { font-size: 13px; padding: 4px 10px; }
+    html.text-lg .guide-ttl { font-size: 15px; }
+    html.text-lg .guide-desc { font-size: 13.5px; }
+    html.text-lg .info-card p { font-size: 15px; }
+    html.text-lg .result-addr { font-size: 15px; }
+    html.text-lg .saved-card-addr { font-size: 14px; }
+    html.text-lg .section-label { font-size: 11.5px; }
+    html.text-lg .nav-btn { font-size: 11.5px; }
+    html.text-lg .action-btn { font-size: 13px; }
+    html.text-lg .hero-meta { font-size: 14px; }
+    html.text-lg .countdown { font-size: 14.5px; }
+    html.text-lg .addr-strip-text { font-size: 14px; }
+
+    /* High contrast */
+    html.hi-con {
+      --border: rgba(255,255,255,0.35);
+      --border2: rgba(255,255,255,0.55);
+      --muted: rgba(221,238,255,0.82);
+      --dim: rgba(221,238,255,0.62);
+      --glass: rgba(255,255,255,0.09);
+    }
+    html.hi-con .hero-card { border-width: 2px; }
+    html.hi-con .bag-chip { border-width: 2px; }
+    html.hi-con .cal-row { border-width: 2px; }
+    html.hi-con .cal-row.next { border-width: 2px; }
+    html.hi-con .pill { font-weight: 700; border: 1.5px solid; }
+    html.hi-con .pill.clear { border-color: var(--clear-b); }
+    html.hi-con .pill.blue  { border-color: var(--blue-b); }
+    html.hi-con .pill.glass { border-color: var(--glass-b); }
+    html.hi-con .pill.black { border-color: var(--black-b); }
+    html.hi-con .pill.food  { border-color: var(--food-b); }
+    html.hi-con .search-input { border-width: 2px; }
+    html.hi-con .results-box { border-width: 2px; }
+    html.hi-con .result-item { border-bottom-width: 2px; }
+    html.hi-con .action-btn { border-width: 2px; }
+    html.hi-con .saved-card { border-width: 2px; }
+    html.hi-con .info-card { border-width: 2px; }
+    html.hi-con .guide-tile { border-width: 2px; }
+    html.hi-con .nav-btn { font-weight: 700; }
+    html.hi-con .countdown { border-width: 2px; }
+
+    /* High contrast light combo */
+    html.hi-con.light {
+      --border: rgba(0,0,0,0.35);
+      --border2: rgba(0,0,0,0.55);
+      --muted: rgba(13,30,53,0.82);
+      --dim: rgba(13,30,53,0.65);
+    }
+
+    /* Accessibility panel */
+    .a11y-panel{position:fixed;inset:0;z-index:600;display:flex;align-items:flex-end;justify-content:center;background:rgba(4,10,20,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fadeIn .2s both}
+    .a11y-sheet{background:linear-gradient(170deg,var(--surface) 0%,var(--bg2) 100%);border:1px solid var(--border2);border-top:1px solid rgba(61,184,245,.2);border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:0 0 max(32px,env(safe-area-inset-bottom));animation:slideUp .3s cubic-bezier(.22,1,.36,1) both}
+    .a11y-handle{width:40px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:14px auto 0}
+    html.light .a11y-sheet{background:linear-gradient(170deg,#f5f9ff 0%,#eef4fc 100%)}
+    .a11y-head{padding:18px 24px 4px;display:flex;align-items:center;justify-content:space-between}
+    .a11y-title{font-family:'Fraunces',serif;font-size:20px;font-weight:500;letter-spacing:-.01em}
+    .a11y-title em{color:var(--accent);font-style:italic}
+    .a11y-close{width:30px;height:30px;border-radius:50%;background:var(--glass);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;line-height:1}
+    .a11y-body{padding:16px 24px 0;display:flex;flex-direction:column;gap:20px}
+    .a11y-row{display:flex;flex-direction:column;gap:8px}
+    .a11y-row-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim)}
+    .a11y-btns{display:flex;gap:8px}
+    .a11y-btn{flex:1;padding:11px 8px;border-radius:var(--rsm);background:var(--glass);border:1px solid var(--border2);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+    .a11y-btn:hover{background:rgba(255,255,255,.08);color:var(--text)}
+    html.light .a11y-btn:hover{background:rgba(0,0,0,.06)}
+    .a11y-btn.active{background:rgba(61,184,245,.12);border-color:rgba(61,184,245,.35);color:var(--accent)}
+    html.light .a11y-btn.active{background:rgba(10,143,212,.1);border-color:rgba(10,143,212,.3);color:var(--accent)}
+    .a11y-btn.active-contrast{background:rgba(255,190,92,.1);border-color:rgba(255,190,92,.35);color:var(--accent2)}
+    html.light .a11y-btn.active-contrast{background:rgba(176,94,0,.08);border-color:rgba(176,94,0,.28);color:var(--accent2)}
+    .a11y-btn-text-sm{font-size:11px}
+    .a11y-btn-text-md{font-size:14px}
+    .a11y-btn-text-lg{font-size:17px;font-weight:700}
+    .preview-text{font-size:13px;color:var(--muted);line-height:1.6;padding:10px 14px;background:var(--glass);border:1px solid var(--border);border-radius:var(--rsm)}
+    /* Desktop: show as floating panel rather than bottom sheet */
+    @media(min-width:900px){
+      .a11y-panel{align-items:center}
+      .a11y-sheet{border-radius:var(--r);max-width:400px;margin:auto}
+      .a11y-handle{display:none}
+    }
 
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
     @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -380,6 +490,54 @@
   <div class="blob blob-3"></div>
 </div>
 
+
+<!-- ══ ACCESSIBILITY PANEL ══ -->
+<div class="a11y-panel hidden" id="a11y-panel">
+  <div class="a11y-sheet" id="a11y-sheet">
+    <div class="a11y-handle"></div>
+    <div class="a11y-head">
+      <div class="a11y-title">Display <em>options</em></div>
+      <button class="a11y-close" id="a11y-close">×</button>
+    </div>
+    <div class="a11y-body">
+
+      <div class="a11y-row">
+        <span class="a11y-row-label">Text size</span>
+        <div class="a11y-btns">
+          <button class="a11y-btn" id="txt-sm" aria-label="Small text">
+            <span class="a11y-btn-text-sm">A</span> Small
+          </button>
+          <button class="a11y-btn" id="txt-md" aria-label="Medium text">
+            <span class="a11y-btn-text-md">A</span> Medium
+          </button>
+          <button class="a11y-btn" id="txt-lg" aria-label="Large text">
+            <span class="a11y-btn-text-lg">A</span> Large
+          </button>
+        </div>
+      </div>
+
+      <div class="a11y-row">
+        <span class="a11y-row-label">Contrast</span>
+        <div class="a11y-btns">
+          <button class="a11y-btn" id="con-normal" aria-label="Normal contrast">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" stroke-dasharray="2 2"/></svg>
+            Normal
+          </button>
+          <button class="a11y-btn" id="con-high" aria-label="High contrast">
+            <svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor" stroke="currentColor" stroke-width="1"/><path d="M12 3a9 9 0 0 1 0 18V3z" fill="white" stroke="none"/></svg>
+            High contrast
+          </button>
+        </div>
+      </div>
+
+      <div class="preview-text" id="a11y-preview">
+        🗑️ <strong>Monday Night</strong> — Black Bag, Clear Bag &amp; Food Caddy. Put bags out from 8pm.
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- ══ INSTALL ONBOARDING MODAL ══ -->
 <div class="onboard-overlay hidden" id="onboard-overlay">
   <div class="onboard-sheet">
@@ -426,6 +584,9 @@
     <button class="btn-theme" id="btn-theme" aria-label="Toggle theme">
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="btn-theme" id="btn-a11y" aria-label="Accessibility options" title="Accessibility">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none"/><path d="M9 9h6M12 9v11M9 20l3-5 3 5"/><path d="M7.5 12.5c-1 1-1.5 2-1.5 3"/><path d="M16.5 12.5c1 1 1.5 2 1.5 3"/></svg>
     </button>
     <button class="icon-btn" id="btn-change" aria-label="Search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -749,18 +910,21 @@ function renderHome(){
   document.getElementById('addr-strip-text').textContent=address||'—';
   document.getElementById('hero-eyebrow').textContent=days===0?"TONIGHT'S SET OUT":days===1?'TOMORROW NIGHT':'NEXT COLLECTION';
   document.getElementById('hero-night').textContent=next.dayName+' Night';
-  document.getElementById('hero-meta').textContent='Put bags out 8pm – 10:30pm the evening before';
+  document.getElementById('hero-meta').textContent=days===0?'Put bags out 8pm – 10:30pm tonight':'Put bags out 8pm – 10:30pm the evening before';
   const cd=document.getElementById('countdown');
-  document.getElementById('countdown-txt').textContent=days===0?'🎉 Tonight — put bags out now!':days===1?'Tomorrow night':`In ${days} days`;
+  document.getElementById('countdown-txt').textContent=days===0?'🎉 Tonight — put bags out tonight!':days===1?'Tomorrow night':`In ${days} days`;
   cd.className='countdown'+(days===0?' tonight':'');
 
+  // Sort: food caddy first, then clear, blue, glass, black
+  const ITEM_ORDER={food:0,clear:1,blue:2,glass:3,black:4};
+  const sortItems=arr=>[...arr].sort((a,b)=>(ITEM_ORDER[a.k]??9)-(ITEM_ORDER[b.k]??9));
   const grid=document.getElementById('bags-grid');grid.innerHTML='';
-  next.items.forEach(b=>{const el=document.createElement('div');el.className='bag-chip '+b.k;el.innerHTML=`<span class="chip-emo">${b.icon}</span><span class="chip-info"><span class="chip-name">${b.label}</span><span class="chip-sub">${b.sub}</span></span>`;grid.appendChild(el);});
+  sortItems(next.items).forEach(b=>{const el=document.createElement('div');el.className='bag-chip '+b.k;el.innerHTML=`<span class="chip-emo">${b.icon}</span><span class="chip-info"><span class="chip-name">${b.label}</span><span class="chip-sub">${b.sub}</span></span>`;grid.appendChild(el);});
 
   const calList=document.getElementById('cal-list');calList.innerHTML='';
   upcoming.slice(0,8).forEach((ev,i)=>{
     const row=document.createElement('div');row.className='cal-row'+(i===0?' next':'');
-    const pills=ev.items.map(b=>`<span class="pill ${b.k}">${b.icon} ${b.label}</span>`).join('');
+    const pills=sortItems(ev.items).map(b=>`<span class="pill ${b.k}">${b.icon} ${b.label}</span>`).join('');
     const badge=i===0?`<span class="cal-badge">${days===0?'Tonight':'Next →'}</span>`:'';
     row.innerHTML=`<div class="cal-date"><div class="cal-dow">${DS[ev.date.getDay()]}</div><div class="cal-dstr">${ev.date.getDate()} ${MS[ev.date.getMonth()]}</div></div><div class="cal-pills">${pills}</div>${badge}`;
     calList.appendChild(row);
@@ -987,6 +1151,69 @@ if('serviceWorker' in navigator){
   try{navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})),{scope:'./'});}catch(_){}
 }
 
+
+// ── ACCESSIBILITY ─────────────────────────────────────────────────────────────
+const A11Y_FONT_KEY = 'bn_font';
+const A11Y_CON_KEY  = 'bn_contrast';
+
+function applyFontSize(size) {
+  document.documentElement.classList.remove('text-md','text-lg');
+  if (size === 'md') document.documentElement.classList.add('text-md');
+  if (size === 'lg') document.documentElement.classList.add('text-lg');
+  // Update button states
+  ['sm','md','lg'].forEach(s => {
+    document.getElementById('txt-'+s)?.classList.toggle('active', s === size);
+  });
+}
+
+function applyContrast(on) {
+  document.documentElement.classList.toggle('hi-con', on);
+  document.getElementById('con-normal')?.classList.toggle('active', !on);
+  document.getElementById('con-high')?.classList.toggle('active-contrast', on);
+}
+
+function initA11y() {
+  const font = localStorage.getItem(A11Y_FONT_KEY) || 'sm';
+  const con  = localStorage.getItem(A11Y_CON_KEY) === '1';
+  applyFontSize(font);
+  applyContrast(con);
+}
+
+function openA11y() {
+  document.getElementById('a11y-panel').classList.remove('hidden');
+  // Sync button states to current settings
+  const font = localStorage.getItem(A11Y_FONT_KEY) || 'sm';
+  const con  = localStorage.getItem(A11Y_CON_KEY) === '1';
+  applyFontSize(font);
+  applyContrast(con);
+}
+function closeA11y() {
+  document.getElementById('a11y-panel').classList.add('hidden');
+}
+
+document.getElementById('btn-a11y').addEventListener('click', openA11y);
+document.getElementById('a11y-close').addEventListener('click', closeA11y);
+document.getElementById('a11y-panel').addEventListener('click', e => {
+  if (e.target === document.getElementById('a11y-panel')) closeA11y();
+});
+
+['sm','md','lg'].forEach(size => {
+  document.getElementById('txt-'+size).addEventListener('click', () => {
+    applyFontSize(size);
+    localStorage.setItem(A11Y_FONT_KEY, size);
+  });
+});
+
+document.getElementById('con-normal').addEventListener('click', () => {
+  applyContrast(false);
+  localStorage.setItem(A11Y_CON_KEY, '0');
+});
+document.getElementById('con-high').addEventListener('click', () => {
+  applyContrast(true);
+  localStorage.setItem(A11Y_CON_KEY, '1');
+});
+
+initA11y();
 
 // ── THEME ─────────────────────────────────────────────────────────────────────
 const THEME_KEY = 'bn_theme';
